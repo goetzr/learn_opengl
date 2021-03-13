@@ -1,0 +1,8 @@
+{
+	"name": "learn-open-gl",
+	"version-string": "0.1.0",
+	"dependencies": [
+		"fmt",
+		"glfw3"
+	]
+}
