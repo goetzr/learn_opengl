@@ -13,4 +13,13 @@ class GlfwError : public std::exception {
   std::string msg_;
 };
 
+class GlewError : public std::exception {
+ public:
+  explicit GlewError(std::string const& msg) : msg_(msg) {}
+  char const* what() const noexcept override { return msg_.c_str(); }
+
+ private:
+  std::string msg_;
+};
+
 #endif // __OPENGL_ERROR_H__

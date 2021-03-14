@@ -7,5 +7,8 @@ set(CMAKE_CXX_EXTENSIONS         FALSE)
 
 find_package(fmt REQUIRED CONFIG)
 find_package(glfw3 REQUIRED CONFIG)
+find_package(GLEW REQUIRED CONFIG)
 
 add_subdirectory(show_window)
+add_subdirectory(legacy_triangle)
+add_subdirectory(modern_opengl)
