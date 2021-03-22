@@ -7,37 +7,37 @@
 
 enum class LogLevel : unsigned char { kInfo, kError };
 
-template<LogLevel level>
-struct ToString;
+template<LogLevel>
+struct LogLevelToString;
 
 template<LogLevel level>
-constexpr char const* ToString_v = ToString<level>::value;
+constexpr char const* LogLevelToString_v = LogLevelToString<level>::value;
 
 template<>
-struct ToString<LogLevel::kInfo> {
+struct LogLevelToString<LogLevel::kInfo> {
   static constexpr char const* value = "INFO";
 };
 
 template<>
-struct ToString<LogLevel::kError> {
+struct LogLevelToString<LogLevel::kError> {
   static constexpr char const* value = "ERROR";
 };
 
 template<LogLevel level>
 void log(char const* msg) {
   if constexpr (level == LogLevel::kError)
-    fmt::print(stderr, "{}: {}\n", ToString_v<level>, msg);
+    fmt::print(stderr, "{}: {}\n", LogLevelToString_v<level>, msg);
   else
-    fmt::print("{}: {}\n", ToString_v<level>, msg);
+    fmt::print("{}: {}\n", LogLevelToString_v<level>, msg);
 }
 
 template<LogLevel level, typename... Ts>
 void log(char const* fmt, Ts&&... args) {
   auto msg = fmt::format(fmt, std::forward<Ts>(args)...);
   if constexpr (level == LogLevel::kError)
-    fmt::print(stderr, "{}: {}\n", ToString_v<level>, msg.c_str());
+    fmt::print(stderr, "{}: {}\n", LogLevelToString_v<level>, msg.c_str());
   else
-    fmt::print("{}: {}\n", ToString_v<level>, msg.c_str());
+    fmt::print("{}: {}\n", LogLevelToString_v<level>, msg.c_str());
 }
 
 inline void info(char const* msg) {

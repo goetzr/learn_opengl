@@ -5,6 +5,7 @@
 #include "glew_wrapper.h"
 #include "glfw_wrapper.h"
 #include "log.h"
+#include "gl_wrapper.h"
 
 using namespace std;
 
