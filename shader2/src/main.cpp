@@ -7,6 +7,9 @@
 #include "log.h"
 #include "gl_wrapper.h"
 
+#include <iostream>
+#include <filesystem>
+
 using namespace std;
 
 int main(int argc, char** argv) {
@@ -33,25 +36,11 @@ int main(int argc, char** argv) {
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), static_cast<void const*>(0));
 
-    string vertexShader =
-      "#version 330 core\n"
-      "\n"
-      "layout(location = 0) in vec4 position;\n"
-      "\n"
-      "void main() {\n"
-      "   gl_Position = position;\n"
-      "}\n";
-
-    string fragmentShader =
-      "#version 330 core\n"
-      "\n"
-      "layout(location = 0) out vec4 color;\n"
-      "\n"
-      "void main() {\n"
-      "   color = vec4(1.0, 0.0, 0.0, 1.0);\n"
-      "}\n";
-
-    auto shader = CreateShader(vertexShader, fragmentShader);
+    auto prog_src = ParseShader("../res/shaders/Basic.shader");
+    cout << filesystem::current_path() << endl;
+    cout << prog_src.vertexSource << endl;
+    cout << prog_src.fragmentSource << endl;
+    auto shader = CreateShader(prog_src.vertexSource, prog_src.fragmentSource);
     glUseProgram(shader);
 
     while (!glfwWindowShouldClose(window)) {

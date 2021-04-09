@@ -1,5 +1,8 @@
 {
   "cmake.configureSettings": {
     "CMAKE_TOOLCHAIN_FILE": "/home/rgoetz/tools/vcpkg/scripts/buildsystems/vcpkg.cmake",
+  },
+  "cmake.debugConfig": {
+    //"args": ["../res/shaders/Basic.shader"]
   }
 }

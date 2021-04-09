@@ -24,4 +24,10 @@ inline char const* ToString(ShaderType type) {
 unsigned CompileShader(ShaderType type, std::string const& source);
 unsigned CreateShader(std::string const& vertexShader, std::string const& fragmentShader);
 
+struct ShaderProgramSource {
+  std::string vertexSource;
+  std::string fragmentSource;
+};
+ShaderProgramSource ParseShader(std::string const& path);
+
 #endif // __GL_WRAPPER_H__
