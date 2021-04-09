@@ -14,7 +14,7 @@ int main(int argc, char** argv) {
 
   try {
     InitGlfw();
-    auto window = CreateWindow("Shader 1", 640, 430);
+    auto window = CreateWindow("Shader 2", 640, 430);
     glfwMakeContextCurrent(window);
 
     InitGlew();
