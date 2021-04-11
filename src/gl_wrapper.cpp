@@ -1,6 +1,7 @@
 #include "gl_wrapper.h"
 
 #include <fstream>
+#include <iostream>
 #include <sstream>
 #include <string>
 
@@ -14,17 +15,17 @@ using namespace std;
 unsigned CompileShader(ShaderType type, std::string const& source) {
   unsigned shader = glCreateShader((int)type);
   auto src = source.c_str();
-  glShaderSource(shader, 1, &src, nullptr);
-  glCompileShader(shader);
+  GLCall(glShaderSource(shader, 1, &src, nullptr));
+  GLCall(glCompileShader(shader));
 
   int result;
-  glGetShaderiv(shader, GL_COMPILE_STATUS, &result);
+  GLCall(glGetShaderiv(shader, GL_COMPILE_STATUS, &result));
   if (result == GL_FALSE) {
     int length;
-    glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &length);
+    GLCall(glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &length));
     char* msg = static_cast<char*>(alloca(length));
-    glGetShaderInfoLog(shader, length, &length, msg);
-    glDeleteShader(shader);
+    GLCall(glGetShaderInfoLog(shader, length, &length, msg));
+    GLCall(glDeleteShader(shader));
     throw GlError(fmt::format("Failed to compile the {} shader: {}.", ToString(type), msg));
   }
 
@@ -36,13 +37,13 @@ unsigned CreateShader(std::string const& vertexShader, std::string const& fragme
   unsigned vs = CompileShader(ShaderType::kVertex, vertexShader);
   unsigned fs = CompileShader(ShaderType::kFragment, fragmentShader);
 
-  glAttachShader(program, vs);
-  glAttachShader(program, fs);
-  glLinkProgram(program);
-  glValidateProgram(program);
+  GLCall(glAttachShader(program, vs));
+  GLCall(glAttachShader(program, fs));
+  GLCall(glLinkProgram(program));
+  GLCall(glValidateProgram(program));
 
-  glDeleteShader(vs);
-  glDeleteShader(fs);
+  GLCall(glDeleteShader(vs));
+  GLCall(glDeleteShader(fs));
 
   return program;
 }
@@ -70,4 +71,16 @@ ShaderProgramSource ParseShader(std::string const& file_path) {
   }
 
   return { ss[0].str(), ss[1].str() };
+}
+
+void ClearGlErrors() {
+  while (glGetError() != GL_NO_ERROR);
+}
+
+bool LogGlCall(char const* function, char const* file, int line) {
+  for (auto err = glGetError(); err != GL_NO_ERROR; err = glGetError()) {
+    cerr << "[OpenGL Error] (" << err << "): " << function << ' ' << file << ':' << line << endl;
+    return false;
+  }
+  return true;
 }

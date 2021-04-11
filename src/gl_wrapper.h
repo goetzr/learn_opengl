@@ -3,6 +3,8 @@
 
 #include <string>
 
+#include <signal.h>
+
 #include <GL/glew.h>
 
 enum class ShaderType {
@@ -29,5 +31,13 @@ struct ShaderProgramSource {
   std::string fragmentSource;
 };
 ShaderProgramSource ParseShader(std::string const& path);
+
+#define ASSERT(x) if (!(x)) raise(SIGTRAP);
+#define GLCall(x) ClearGlErrors();\
+  x;\
+  ASSERT(LogGlCall(#x, __FILE__, __LINE__))
+
+void ClearGlErrors();
+bool LogGlCall(char const* function, char const* file, int line);
 
 #endif // __GL_WRAPPER_H__
